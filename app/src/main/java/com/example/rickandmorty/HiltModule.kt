@@ -2,6 +2,9 @@ package com.example.rickandmorty
 
 import com.example.rickandmorty.data.api.CharactersApi
 import com.example.rickandmorty.data.datasource.ApiDataSource
+import com.example.rickandmorty.data.datasource.ApiPagingSource
+import com.example.rickandmorty.data.repository.CharactersRepository
+import com.example.rickandmorty.domain.GetApiCharactersUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,4 +38,21 @@ class HiltModule {
     @Provides
     fun providesCharactersDataSource(charactersApi: CharactersApi): ApiDataSource =
         ApiDataSource(charactersApi)
+
+    @Provides
+    fun provideCharactersPagingSource(
+        apiDataSource: ApiDataSource
+    ) = ApiPagingSource(apiDataSource)
+
+    @Provides
+    fun providesCharactersRepository(
+        apiPagingSource: ApiPagingSource
+    ): CharactersRepository =
+        CharactersRepository(apiPagingSource)
+
+    @Provides
+    fun providesGetAllCharactersUseCase(
+        charactersRepository: CharactersRepository
+    ): GetApiCharactersUseCase =
+        GetApiCharactersUseCase(charactersRepository)
 }
