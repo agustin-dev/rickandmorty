@@ -54,9 +54,10 @@ class HiltModule {
     @Provides
     fun providesCharactersRepository(
         apiPagingSource: ApiPagingSource,
-        dbPagingSource: DbPagingSource
+        dbPagingSource: DbPagingSource,
+        dataSource: ApiDataSource
     ): CharactersRepository =
-        CharactersRepository(apiPagingSource, dbPagingSource)
+        CharactersRepository(apiPagingSource, dbPagingSource, dataSource)
 
     @Provides
     fun providesGetAllCharactersUseCase(

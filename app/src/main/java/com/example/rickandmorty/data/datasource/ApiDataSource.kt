@@ -23,4 +23,14 @@ class ApiDataSource @Inject constructor(
             emit(NetworkResult.Error(exception.message.orEmpty()))
         }
     }
+
+    fun search(name: String): Flow<NetworkResult<CharacterResponse?>> = flow {
+        emit(NetworkResult.Loading())
+        try {
+            emit(NetworkResult.Success(charactersApi.search(name)))
+        } catch (exception: Exception) {
+//            Log.e(ApiDataSource::class.toString(), "$exception")
+            emit(NetworkResult.Error(exception.message.orEmpty()))
+        }
+    }
 }

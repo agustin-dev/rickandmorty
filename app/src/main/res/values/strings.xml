@@ -11,4 +11,9 @@
     <string name="episodes">Episodes</string>
     <string name="loading">Loading…</string>
     <string name="error">Error</string>
+    <string name="character_name">Character name</string>
+    <string name="character">Character</string>
+    <string name="search_for_a_character">Search for a Character</string>
+    <string name="no_characters_found">No Characters found</string>
+
 </resources>

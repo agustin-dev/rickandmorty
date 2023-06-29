@@ -27,6 +27,7 @@ fun MainScaffold(navController: NavHostController) {
     val topBarTitle = rememberSaveable { mutableStateOf("") }
     val isFavorite = rememberSaveable { mutableStateOf<Boolean>(false) }
     val (fabOnClick, setFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
+
     Scaffold(
         topBar = { DetailsTopBar(navController, topBarTitle) },
         bottomBar = { CharactersBottomNav(navController) },
@@ -39,7 +40,9 @@ fun MainScaffold(navController: NavHostController) {
         ) {
             composable(Screen.Search.route) {
                 val searchViewModel: SearchViewModel = hiltViewModel()
-                SearchScreen(searchViewModel, paddingValues)
+                SearchScreen(searchViewModel, paddingValues) { character ->
+                    navController.navigate(Screen.Detail.createRoute(character.id, Screen.Search))
+                }
             }
             composable(Screen.List.route) {
                 val listViewModel: ListViewModel = hiltViewModel()

@@ -12,4 +12,7 @@ interface CharactersApi {
 
     @GET("character/{id}")
     suspend fun getSingleCharacter(@Path("id") id: Int): CharacterSchema
+
+    @GET("character")
+    suspend fun search(@Query("name") name: String): CharacterResponse
 }
