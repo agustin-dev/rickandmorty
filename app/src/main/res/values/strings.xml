@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Rick And Morty</string>
     <string name="check_your_internet_connection">Check your Internet connection</string>
+    <string name="no_favortites_message">Favorites empty</string>
+    <string name="status">Status</string>
+    <string name="species">Species</string>
+    <string name="type">Type</string>
+    <string name="gender">Gender</string>
 </resources>

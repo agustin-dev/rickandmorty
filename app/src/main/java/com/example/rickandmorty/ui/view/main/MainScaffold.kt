@@ -37,7 +37,9 @@ fun MainScaffold(navController: NavHostController) {
             }
             composable(Screen.Favorites.route) {
                 val favoritesViewModel: FavoritesViewModel = hiltViewModel()
-                FavoritesScreen(favoritesViewModel, paddingValues)
+                FavoritesScreen(favoritesViewModel, paddingValues) { character ->
+                    navController.navigate(Screen.Detail.createRoute(character.id, Screen.Favorites))
+                }
             }
             composable(Screen.Detail.route) {
                 val detailsViewModel: DetailsViewModel = hiltViewModel()
