@@ -1,11 +1,17 @@
 package com.example.rickandmorty.ui.view.main
 
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.rickandmorty.model.Constants
 import com.example.rickandmorty.model.Screen
 import com.example.rickandmorty.ui.view.details.DetailsScreen
 import com.example.rickandmorty.ui.view.details.DetailsViewModel
@@ -18,8 +24,14 @@ import com.example.rickandmorty.ui.view.search.SearchViewModel
 
 @Composable
 fun MainScaffold(navController: NavHostController) {
+    val topBarTitle = rememberSaveable { mutableStateOf("") }
+    val isFavorite = rememberSaveable { mutableStateOf<Boolean>(false) }
+    val (fabOnClick, setFabOnClick) = remember { mutableStateOf<(() -> Unit)?>(null) }
     Scaffold(
+        topBar = { DetailsTopBar(navController, topBarTitle) },
         bottomBar = { CharactersBottomNav(navController) },
+        floatingActionButton = { AddFavoriteButton(navController, isFavorite, fabOnClick) },
+        floatingActionButtonPosition = FabPosition.End,
     ) { paddingValues ->
         NavHost(
             navController = navController,
@@ -42,8 +54,19 @@ fun MainScaffold(navController: NavHostController) {
                 }
             }
             composable(Screen.Detail.route) {
-                val detailsViewModel: DetailsViewModel = hiltViewModel()
-                DetailsScreen(detailsViewModel, paddingValues)
+                it.arguments?.getString(Constants.CHARACTER_ID)?.let { characterId ->
+                    Screen.Detail.getSource(it.arguments?.getString(Constants.SCREEN_SOURCE))?.let { sourceScreen ->
+                        val detailsViewModel: DetailsViewModel = hiltViewModel()
+                        LaunchedEffect(Unit) {
+                            detailsViewModel.getCharacter(characterId.toInt(), sourceScreen)
+                            setFabOnClick {
+                                isFavorite.value = !isFavorite.value
+                                detailsViewModel.switchFavorite()
+                            }
+                        }
+                        DetailsScreen(detailsViewModel, paddingValues, isFavorite, topBarTitle)
+                    }
+                }
             }
         }
     }
